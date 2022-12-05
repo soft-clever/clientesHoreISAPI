@@ -1,0 +1,112 @@
+unit Service.Utils;
+
+interface
+
+uses
+  System.Generics.Collections, System.JSON, System.SysUtils, System.StrUtils;
+
+type
+  TUtils = class
+  private
+    class procedure TryFreeAndNil(objeto: TObject);
+  public
+    class function PegarValor(JSon, campo: string; index : integer = 0) : string;
+    function ObjectListToJsonArray<T: Class>(aList: TObjectList<T>): TJsonArray;
+  end;
+
+implementation
+
+uses
+  REST.Json;
+
+{ TUtils }
+
+function TUtils.ObjectListToJsonArray<T>(
+  aList: TObjectList<T>): TJsonArray;
+var
+  I : integer;
+begin
+  result := TJSONArray.Create;
+
+  for I := 0 to aList.Count -1 do
+  begin
+    result.Add(TJson.ObjectToJsonObject(aList[I]));
+  end;
+end;
+
+class function TUtils.PegarValor(JSon, campo: string; index : integer = 0) : string;
+var
+  JSONObject : TJSONObject;
+  JSONArray  : TJSONArray;
+  JSONValue : TJSONValue;
+  valor : String;
+begin
+  if (JSon = EmptyStr) or (JSon = '[]') or (JSon = '{}') then
+  begin
+    result := '';
+    Exit;
+  end;
+
+  JSONValue := TJSONObject.ParseJSONValue(JSon);
+
+  // pega o retorno de um json e retorna o valor do campo desejado
+  if JSONValue is TJSONObject then
+    JSONObject := JSONValue as TJSONObject
+  else if JSONValue is TJSONArray then
+    JSONArray := JSONValue as TJSONArray
+  else
+  begin
+    if JSONValue <> nil then
+      TryFreeAndNil(JSONValue);
+
+    exit;
+  end;
+
+  if JSONValue is TJSONObject then
+  begin
+    if Assigned(JSONObject.GetValue(campo)) then
+    begin
+      result := ifthen((JSONObject.GetValue(campo).Value <> '') or
+        (JSONObject.GetValue(campo).ToJson = '""'),
+        JSONObject.GetValue(campo).Value, JSONObject.GetValue(campo).ToJson);
+    end
+    else
+    begin
+      result := '';
+      TryFreeAndNil(JSONObject);
+      exit;
+    end;
+
+    TryFreeAndNil(JSONObject)
+  end
+  else if JSONValue is TJSONArray then
+  begin
+    if JSONArray.Get(index) <> nil then
+    begin
+      valor := ifthen((JSONArray.Get(index).Value <> '') or
+        (JSONArray.Get(index).ToString = '""'),
+         JSONArray.Get(index).Value, JSONArray.Get(index).ToString);
+      TryFreeAndNil(JSONArray);
+
+      if campo = '' then
+        result := valor
+      else
+        result := PegarValor(valor, campo);
+    end
+    else
+    begin
+      result := '';
+      TryFreeAndNil(JSONArray);
+    end;
+  end;
+end;
+
+class procedure TUtils.TryFreeAndNil(objeto: TObject);
+begin
+  try
+    FreeAndNil(objeto);
+  except
+  end;
+end;
+
+end.

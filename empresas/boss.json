@@ -1,0 +1,15 @@
+{
+	"name": "empresasService",
+	"description": "",
+	"version": "1.0.0",
+	"homepage": "",
+	"mainsrc": "./",
+	"projects": [],
+	"dependencies": {
+		"github.com/HashLoad/handle-exception": "^0.1.7",
+		"github.com/HashLoad/horse": "^3.0.2",
+		"github.com/HashLoad/horse-cors": "^1.0.5",
+		"github.com/HashLoad/horse-jwt": "^2.0.11",
+		"github.com/HashLoad/jhonson": "^1.1.4"
+	}
+}

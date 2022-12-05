@@ -1,0 +1,34 @@
+unit GetProdutoById.UseCase;
+
+interface
+
+uses
+  Models.DaoGeneric, System.Generics.Collections,
+  Produto.Entity;
+
+type
+  TGetProdutoByIdUseCase = class
+  private
+    FDAOProdutos: iDAOGeneric<TProduto>;
+  public
+    constructor Create(Value: iDAOGeneric<TProduto>);
+    function execute(limit: Integer = 20; page: Integer = 1)
+      : TObjectList<TProduto>;
+  end;
+
+implementation
+
+{ TListAllClientesUseCase }
+constructor TGetProdutoByIdUseCase.Create(Value: iDAOGeneric<TProduto>);
+begin
+  FDAOProdutos := Value;
+end;
+
+function TGetProdutoByIdUseCase.execute(limit: Integer = 20; page: Integer = 1)
+  : TObjectList<TProduto>;
+begin
+  result := TObjectList<TProduto>.Create();
+  FDAOProdutos.Find(result, limit, page);
+end;
+
+end.

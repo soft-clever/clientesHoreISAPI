@@ -1,0 +1,38 @@
+unit DeleteUsuario.UseCase;
+
+interface
+
+uses
+  Models.DaoGeneric, Usuario.Entity, System.JSON;
+
+type
+  iDeleteUsuarioUseCase = interface
+    ['{36360f71-191f-44fe-9439-22c698cbbb9f}']
+    function execute(idUsuario: String): TUsuario;
+  end;
+
+  TDeleteUsuarioUseCase = class(TInterfacedObject, iDeleteUsuarioUseCase)
+  private
+    FDAOUsuarios: iDAOGeneric<TUsuario>;
+  public
+    constructor Create(Value: iDAOGeneric<TUsuario>);
+    function execute(id: String): TUsuario;
+  end;
+
+implementation
+
+uses
+  REST.JSON;
+
+constructor TDeleteUsuarioUseCase.Create(Value: iDAOGeneric<TUsuario>);
+begin
+  FDAOUsuarios := Value;
+end;
+
+function TDeleteUsuarioUseCase.execute(id: String): TUsuario;
+begin
+  FDAOUsuarios.Find(id, result);
+  FDAOUsuarios.Delete(result);
+end;
+
+end.

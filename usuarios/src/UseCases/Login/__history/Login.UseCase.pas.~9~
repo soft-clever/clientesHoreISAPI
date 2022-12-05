@@ -1,0 +1,44 @@
+unit Login.UseCase;
+
+interface
+
+uses
+  Models.DaoGeneric, System.Generics.Collections,
+  Usuario.Entity, System.SysUtils;
+
+type
+  TLoginUseCase = class
+  private
+    FDAOUsuarios: iDAOGeneric<TUsuario>;
+  public
+    constructor Create(Value: iDAOGeneric<TUsuario>);
+    function execute(email, senha: string): TUsuario;
+  end;
+
+implementation
+
+{ TListAllClientesUseCase }
+constructor TLoginUseCase.Create(Value: iDAOGeneric<TUsuario>);
+begin
+  FDAOUsuarios := Value;
+end;
+
+function TLoginUseCase.execute(email, senha: string): TUsuario;
+begin
+  result := TUsuario.Create;
+
+  try
+    FDAOUsuarios.Find(
+      '*',
+      'email = ' + QuotedStr(email) +
+      ' and senha = sha2(' + QuotedStr(senha) + ', 256)',
+    '', '', '', result);
+  except
+    begin
+      raise Exception.Create('Usuário não encontrado');
+    end;
+  end;
+
+end;
+
+end.

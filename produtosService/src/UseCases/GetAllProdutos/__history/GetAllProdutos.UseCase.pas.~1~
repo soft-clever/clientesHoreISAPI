@@ -1,0 +1,7 @@
+unit GetAllProdutos.UseCase;
+
+interface
+
+implementation
+
+end.

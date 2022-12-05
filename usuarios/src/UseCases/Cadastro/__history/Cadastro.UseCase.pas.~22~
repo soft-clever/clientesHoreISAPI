@@ -1,0 +1,47 @@
+unit Cadastro.UseCase;
+
+interface
+
+uses
+  Models.DaoGeneric, System.Generics.Collections,
+  Usuario.Entity, System.SysUtils, System.JSON, REST.Json, Validacoes.Utils,
+  Horse.Exception;
+
+type
+  iCadastroUseCase = interface
+    ['{fe844b48-6528-48fa-a745-a8c0606a8bf7}']
+    function execute(body: TJSONObject): TUsuarios;
+  end;
+
+  TCadastroUseCase = class(TInterfacedObject, iCadastroUseCase)
+  private
+    FDAOUsuarios: iDAOGeneric<TUsuarios>;
+  public
+    constructor Create(Value: iDAOGeneric<TUsuarios>);
+    function execute(body: TJSONObject): TUsuarios;
+  end;
+
+implementation
+
+constructor TCadastroUseCase.Create(Value: iDAOGeneric<TUsuarios>);
+begin
+  FDAOUsuarios := Value;
+end;
+
+function TCadastroUseCase.execute(body: TJSONObject): TUsuarios;
+var
+  usuario: TUsuarios;
+begin
+  usuario := TJson.JsonToObject<TUsuarios>(body);
+
+  usuario.Validate(vtInsert);
+  FDAOUsuarios.Find('email', usuario.email, usuario);
+
+  if not(Assigned(usuario)) then
+   raise EHorseException.New.Error('Email já cadastrado');
+
+  FDAOUsuarios.Insert(usuario);
+  result := usuario;
+end;
+
+end.

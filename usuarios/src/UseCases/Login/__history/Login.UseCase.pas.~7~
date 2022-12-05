@@ -1,0 +1,33 @@
+unit Login.UseCase;
+
+interface
+
+uses
+  Models.DaoGeneric, System.Generics.Collections,
+  Usuario.Entity;
+
+type
+  TLoginUseCase = class
+  private
+    FDAOUsuarios: iDAOGeneric<TUsuario>;
+  public
+    constructor Create(Value: iDAOGeneric<TUsuario>);
+    function execute(email, senha: string): TUsuario;
+  end;
+
+implementation
+
+{ TListAllClientesUseCase }
+constructor TLoginUseCase.Create(Value: iDAOGeneric<TUsuario>);
+begin
+  FDAOUsuarios := Value;
+end;
+
+function TLoginUseCase.execute(email, senha: string)
+  : TUsuario;
+begin
+  result := TUsuario.Create;
+  FDAOUsuarios.Find('email', email, result);
+end;
+
+end.

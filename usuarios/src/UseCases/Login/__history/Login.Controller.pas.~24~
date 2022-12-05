@@ -1,0 +1,60 @@
+unit Login.Controller;
+
+interface
+
+uses
+  Horse, Login.UseCase, REST.Json, System.SysUtils, Usuario.Entity, System.Json,
+  Token.Utils;
+
+type
+
+  TLoginController = class
+  private
+    FLoginUseCase: TLoginUseCase;
+  protected
+    { protected declarations }
+  public
+    constructor Create(Value: TLoginUseCase);
+    procedure handle(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+
+  end;
+
+implementation
+
+uses
+  Service.Utils, System.Generics.Collections;
+
+{ TGetAllLoginController }
+
+constructor TLoginController.Create(Value: TLoginUseCase);
+begin
+  FLoginUseCase := Value;
+end;
+
+procedure TLoginController.handle(Req: THorseRequest; Res: THorseResponse;
+  Next: TProc);
+var
+  Usuario: TUsuario;
+  email, senha, body: string;
+begin
+  email := TUtils.PegarValor(Req.body, 'email');
+  senha := TUtils.PegarValor(Req.body, 'senha');
+
+  try
+    Usuario := FLoginUseCase.execute(email, senha);
+  except
+    on e: exception do
+    begin
+      Usuario.Free;
+      Res.Send(e.Message).Status(400);
+      exit;
+    end;
+  end;
+
+  Res.ContentType('application/json;charset=UTF-8');
+  Res.Send('{"token":"' + TToken.gerarToken('userToken', Usuario.user_token) +
+    '"}').Status(200);
+  Usuario.Free;
+end;
+
+end.

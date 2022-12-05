@@ -1,0 +1,72 @@
+unit Usuario.Entity;
+
+interface
+
+uses
+  SimpleAttributes, SimpleDAO,
+  System.Generics.Collections, Validacoes.Utils, Horse;
+
+type
+
+  [Tabela('usuarios')]
+  TUsuarios = class
+
+  private
+    FId: Integer;
+    Fnome: String;
+    Fultimo_nome: String;
+    Femail: String;
+    Fsenha: String;
+    Fcelular: String;
+    Fstatus: String;
+    Fuser_token: String;
+    Fvendedor_id: Integer;
+
+  public
+    [Campo('id'), PK, AutoInc]
+    property id: Integer read FId write FId;
+
+    [Campo('nome')]
+    property nome: String read Fnome write Fnome;
+
+    [Campo('ultimo_nome')]
+    property ultimo_nome: String read Fultimo_nome write Fultimo_nome;
+
+    [Campo('email')]
+    property email: String read Femail write Femail;
+
+    [Campo('senha')]
+    property senha: String read Fsenha write Fsenha;
+
+    [Campo('celular')]
+    property celular: String read Fcelular write Fcelular;
+
+    [Campo('status')]
+    property status: String read Fstatus write Fstatus;
+
+    [Campo('user_token')]
+    property user_token: String read Fuser_token write Fuser_token;
+
+    [Campo('vendedor_id')]
+    property vendedor_id: Integer read Fvendedor_id write Fvendedor_id;
+
+    destructor Destroy; override;
+    procedure Validate(validateStatus: TValidateType = vtNone);
+  end;
+
+implementation
+
+destructor TUsuarios.Destroy;
+begin
+  inherited;
+end;
+
+procedure TUsuarios.Validate(validateStatus: TValidateType);
+begin
+
+  if not(TValidacoes.isEmailValido(email)) then
+    raise EHorseException.New.Error('Email não é válido')
+
+end;
+
+end.

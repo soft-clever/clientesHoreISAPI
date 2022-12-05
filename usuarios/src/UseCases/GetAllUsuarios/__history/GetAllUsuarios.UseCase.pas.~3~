@@ -1,0 +1,34 @@
+unit GetAllUsuarios.UseCase;
+
+interface
+
+uses
+  Models.DaoGeneric, System.Generics.Collections,
+  Usuario.Entity;
+
+type
+  TGetAllUsuariosUseCase = class
+  private
+    FDAOUsuarios: iDAOGeneric<TUsuario>;
+  public
+    constructor Create(Value: iDAOGeneric<TUsuario>);
+    function execute(limit: Integer = 20; page: Integer = 1)
+      : TObjectList<TUsuario>;
+  end;
+
+implementation
+
+{ TListAllClientesUseCase }
+constructor TGetAllUsuariosUseCase.Create(Value: iDAOGeneric<TUsuario>);
+begin
+  FDAOUsuarios := Value;
+end;
+
+function TGetAllUsuariosUseCase.execute(limit: Integer = 20; page: Integer = 1)
+  : TObjectList<TUsuario>;
+begin
+  result := TObjectList<TUsuario>.Create();
+  FDAOUsuarios.Find(result, limit, page);
+end;
+
+end.

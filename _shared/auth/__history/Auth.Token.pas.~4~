@@ -1,0 +1,68 @@
+unit Auth.Token;
+
+interface
+
+uses JOSE.Core.JWT, JOSE.Core.Builder, System.SysUtils, System.DateUtils,
+  JOSE.Core.JWK;
+
+type
+  TAuthToken = class
+  private
+    class function secretJWT(): string;
+  public
+    class function gerarToken(claimChave: string = '';
+      claimValor: string = ''): string;
+    class function verfToken(CompactToken: string): boolean;
+  end;
+
+implementation
+
+class function TAuthToken.secretJWT: string;
+begin
+  result := 'soft@1973';
+end;
+
+class function TAuthToken.gerarToken(claimChave: string = '';
+  claimValor: string = ''): string;
+var
+  Token: TJWT;
+  CompactToken: String;
+begin
+  Token := TJWT.Create;
+  try
+    Token.Claims.IssuedAt := Now;
+    Token.Claims.Expiration := IncHour(Now, 1);
+    Token.Claims.Issuer := 'Soft Clever Informática LTDA.';
+
+    if ((claimChave <> '') and (claimValor <> '')) then
+      Token.Claims.SetClaimOfType<string>(claimChave, claimValor);
+
+    CompactToken := TJOSE.SHA256CompactToken(secretJWT, Token);
+  finally
+    FreeAndNil(Token);
+  end;
+  result := CompactToken;
+end;
+
+class function TAuthToken.verfToken(CompactToken: string): boolean;
+var
+  Key: TJWK;
+  Token: TJWT;
+begin
+  Key := TJWK.Create(secretJWT);
+  Token := TJOSE.Verify(key, CompactToken);
+
+  if Assigned(Token) then
+  begin
+    try
+      if Token.Verified then
+        result := true
+      else
+        result := false;
+    finally
+      Token.Free;
+    end;
+  end;
+end;
+
+end.

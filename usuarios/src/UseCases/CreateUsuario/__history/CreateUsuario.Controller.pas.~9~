@@ -1,0 +1,42 @@
+unit CreateUsuario.Controller;
+
+interface
+
+uses Horse, CreateUsuario.UseCase;
+
+type
+  iCreateUsuarioController = interface
+    ['{4252b53e-1153-4523-9f11-7a5986b3e1c6}']
+    procedure handle(Req: THorseRequest; Res: THorseResponse;
+  Next: TProc);
+  end;
+
+  TCreateUsuarioController = class(TInterfacedObject, iCreateUsuarioController)
+  private
+    FCreateUsuarioUseCase: iCreateUsuarioUseCase;
+  public
+    constructor Create(Value: iCreateUsuarioUseCase);
+    procedure handle(Req: THorseRequest; Res: THorseResponse; Next: TNextProc);
+  end;
+
+implementation
+
+uses System.JSON, Usuario.Entity, MOdels.DaoGeneric, Service.Utils,
+  Rest.JSON;
+
+constructor TCreateUsuarioController.Create(Value: iCreateUsuarioUseCase);
+begin
+  FCreateUsuarioUseCase := Value;
+end;
+
+procedure TCreateUsuarioController.handle(Req: THorseRequest;
+  Res: THorseResponse; Next: TNextProc);
+var
+  LBody: TJSONObject;
+begin
+  LBody := Req.Body<TJSONObject>;
+  LBody := TJSON.ObjectToJsonObject(FCreateUsuarioUseCase.execute(LBody));
+  Res.Send<TJSONObject>(LBody);
+end;
+
+end.

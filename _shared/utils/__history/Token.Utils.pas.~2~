@@ -1,0 +1,18 @@
+unit Token.Utils;
+
+interface
+
+  type TToken = class
+    private
+    public
+      function gerarToken(): string;
+  end;
+
+implementation
+
+function TToken.gerarToken: string;
+begin
+
+end;
+
+end.

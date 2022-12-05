@@ -1,0 +1,43 @@
+unit Auth.Middleware;
+
+interface
+
+uses
+  Horse, Service.Utils, Auth.Token;
+
+type
+  TAuthMiddleware = class
+  private
+  public
+    class procedure verfTokens(Req: THorseRequest; Res: THorseResponse;
+      Next: TNextProc);
+  end;
+
+implementation
+
+class procedure TAuthMiddleware.verfTokens(Req: THorseRequest;
+  Res: THorseResponse; Next: TNextProc);
+var
+  Token: string;
+begin
+  if Req.Headers['authorization'] = '' then
+  begin
+    Res.Send('Token não informado').Status(400);
+    raise EHorseCallbackInterrupted.Create;
+  end;
+
+  try
+    Token := copy(Req.Headers['authorization'],
+      pos(Req.Headers['authorization'], ' '), -1);
+    TAuthToken.verfToken(Req.Headers['authorization']);
+  except
+    begin
+      Res.Send('Token inválido').Status(401);
+      raise EHorseCallbackInterrupted.Create;
+    end;
+  end;
+
+  Next;
+end;
+
+end.

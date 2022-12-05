@@ -1,0 +1,46 @@
+unit GetProdutoById.Controller;
+
+interface
+
+uses
+  Horse, GetProdutoById.UseCase;
+
+type
+  iGetProdutoByIdController = interface
+    ['{1b492946-b2f6-4b8d-bc22-712947e80eeb}']
+    procedure handle(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+  end;
+
+  TGetProdutoByIdController = class(TInterfacedObject, iGetProdutoByIdController)
+  private
+    FGetProdutoByIdUseCase: iGetProdutoByIdUseCase;
+  public
+    constructor Create(Value: iGetProdutoByIdUseCase);
+    procedure handle(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+  end;
+
+implementation
+
+uses
+  Service.Utils, Produto.Entity, System.JSON, REST.Json;
+
+{ TGetProdutoByIdController }
+
+constructor TGetProdutoByIdController.Create(Value: iGetProdutoByIdUseCase);
+begin
+  FGetProdutoByIdUseCase := Value;
+end;
+
+procedure TGetProdutoByIdController.handle(Req: THorseRequest;
+  Res: THorseResponse; Next: TProc);
+var
+  produto: TProduto;
+  id: String;
+begin
+  id := Req.Params.Items['id'];
+  produto := FGetProdutoByIdUseCase.execute(id);
+  Res.Send<TJSONObject>(TJson.ObjectToJsonObject(produto)).Status(200);
+  produto.Free;
+end;
+
+end.

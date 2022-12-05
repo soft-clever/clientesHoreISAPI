@@ -1,0 +1,20 @@
+unit Produtos.Routes;
+
+interface
+
+uses
+  Horse;
+
+procedure Registry();
+
+implementation
+
+uses
+  GetAllProdutos;
+
+procedure Registry();
+begin
+  THorse.Get('/produtos', GetAllProdutos.GetController.handle);
+end;
+
+end.

@@ -1,0 +1,35 @@
+unit CreateProduto.UseCase;
+
+interface
+
+uses Models.DaoGeneric, Produto.Entity, System.JSON;
+
+type
+  TCreateProdutoUseCase = class
+  private
+    FDAOProduto: iDAOGeneric<TProduto>;
+  public
+    constructor Create(Value: iDAOGeneric<TProduto>);
+    function execute(body: TJSONObject): TProduto;
+  end;
+
+implementation
+
+uses REST.Json;
+
+constructor TCreateProdutoUseCase.Create(Value: iDAOGeneric<TProduto>);
+begin
+  FDAOProduto := Value;
+end;
+
+function TCreateProdutoUseCase.execute(body: TJSONObject)
+  : TProduto;
+var
+  produto: TProduto;
+begin
+  produto := TJson.JsonToObject<TProduto>(body);
+  FDAOProduto.Insert(produto);
+  result := produto;
+end;
+
+end.

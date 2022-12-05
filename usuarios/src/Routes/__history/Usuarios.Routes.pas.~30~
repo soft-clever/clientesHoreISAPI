@@ -1,0 +1,24 @@
+unit Usuarios.Routes;
+
+interface
+
+uses
+  Horse, Horse.JWT, Login.Controller;
+
+procedure Registry();
+
+implementation
+
+uses
+  GetAllUsuarios, GetUsuarioById, CreateUsuario, Login;
+
+procedure Registry();
+begin
+  THorse.Post('/login', Login.GetController.handle);
+  THorse.Post('/cadastro', CreateUsuario.getController.handle);
+
+  THorse.Get('/usuarios', GetAllUsuarios.GetController.handle);
+//  THorse.Get('/usuarios/:id', GetUsuarioById.GetController.handle);
+end;
+
+end.

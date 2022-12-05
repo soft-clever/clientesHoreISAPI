@@ -1,0 +1,21 @@
+unit Token.Utils;
+
+
+interface
+
+uses JOSE.Core.JWT, JOSE.Core.Builder;
+
+  type TToken = class
+    private
+    public
+      function gerarToken(): string;
+  end;
+
+implementation
+
+function TToken.gerarToken: string;
+begin
+
+end;
+
+end.

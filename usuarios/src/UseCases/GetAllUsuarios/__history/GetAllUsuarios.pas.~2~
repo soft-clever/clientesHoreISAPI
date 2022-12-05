@@ -1,0 +1,27 @@
+unit GetAllUsuarios;
+
+interface
+
+uses
+  GetAllUsuarios.Controller;
+
+function GetController: TGetAllUsuariosController;
+
+implementation
+
+uses
+  Models.DaoGeneric, Produto.Entity, GetAllUsuarios.UseCase;
+
+function GetController: TGetAllUsuariosController;
+var
+  DaoUsuarios: iDAOGeneric<TProduto>;
+  GetAllUsuariosUseCase: TGetAllUsuariosUseCase;
+begin
+  DaoUsuarios := TDAOGeneric<TProduto>.Create;
+
+  GetAllUsuariosUseCase := TGetAllUsuariosUseCase.Create(DaoUsuarios);
+
+  result := TGetAllUsuariosController.Create(GetAllUsuariosUseCase);
+end;
+
+end.

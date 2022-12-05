@@ -1,0 +1,32 @@
+unit Auth.Middleware;
+
+interface
+
+uses
+  Horse, Service.Utils;
+
+type
+  TTokenMiddleware = class
+  private
+  public
+    class procedure verfTokens(Req: THorseRequest; Res: THorseResponse;
+      Next: TNextProc);
+  end;
+
+implementation
+
+class procedure TTokenMiddleware.verfTokens(Req: THorseRequest;
+  Res: THorseResponse; Next: TNextProc);
+var
+  token: string;
+begin
+  if not Req.Headers.ContainsValue('authorization') then
+  begin
+    Res.Send('Token não informado').Status(401);
+raise EHorseCallbackInterrupted.Create;
+  end;
+
+  Next;
+end;
+
+end.

@@ -1,0 +1,37 @@
+unit GetProdutoById.UseCase;
+
+interface
+
+uses
+  Models.DaoGeneric, Produto.Entity;
+
+type
+  iGetProdutoByIdUseCase = interface
+    ['{a396552c-c57c-49c9-b545-2c9448dc2b20}']
+    function execute(idCliente: String): TProduto;
+  end;
+
+  TGetProdutoByIdUseCase = class(TInterfacedObject, iGetProdutoByIdUseCase)
+  private
+    FDAOClientes: iDAOGeneric<TProduto>;
+  public
+    constructor Create(Value: iDAOGeneric<TProduto>);
+    function execute(id: String): TProduto;
+  end;
+
+implementation
+
+{ TGetProdutoByIdUseCase }
+
+constructor TGetProdutoByIdUseCase.Create(Value: iDAOGeneric<TProduto>);
+begin
+  FDAOClientes := Value;
+end;
+
+function TGetProdutoByIdUseCase.execute(id: String): TProduto;
+begin
+  result := TProduto.Create;
+  FDAOClientes.Find(id, result);
+end;
+
+end.

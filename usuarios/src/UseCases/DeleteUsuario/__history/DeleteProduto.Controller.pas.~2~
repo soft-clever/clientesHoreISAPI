@@ -1,0 +1,46 @@
+unit DeleteProduto.Controller;
+
+interface
+
+uses
+  Horse, DeleteProduto.UseCase;
+
+type
+  iDeleteProdutoController = interface
+    ['{fdb44578-51bb-4280-acc8-8161459e287c}']
+    procedure handle(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+  end;
+
+  TDeleteProdutoController = class(TInterfacedObject, iDeleteProdutoController)
+  private
+    FDeleteProdutoUseCase: iDeleteProdutoUseCase;
+  public
+    constructor Create(Value: iDeleteProdutoUseCase);
+    procedure handle(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+  end;
+
+implementation
+
+uses
+  Service.Utils, Models.Entities.Cliente, System.JSON, REST.Json;
+
+{ TClienteByIdController }
+
+constructor TDeleteProdutoController.Create(Value: iDeleteProdutoUseCase);
+begin
+  FDeleteProdutoUseCase := Value;
+end;
+
+procedure TDeleteProdutoController.handle(Req: THorseRequest;
+  Res: THorseResponse; Next: TProc);
+var
+  cliente: TCliente;
+  idCliente: String;
+begin
+  idCliente := Req.Params.Items['id'];
+  cliente := FDeleteProdutoUseCase.execute(idCliente);
+  Res.Send<TJSONObject>(TJson.ObjectToJsonObject(cliente)).Status(200);
+  cliente.Free;
+end;
+
+end.
