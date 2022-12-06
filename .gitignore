@@ -1,3 +1,7 @@
+libmysql.dll
+*/*.dproj.local
+*/*.identcache
+*/*.res
 */modules
 */__history
 */__recovery
