@@ -1,0 +1,46 @@
+unit GetEmpresaById.Controller;
+
+interface
+
+uses
+  Horse, GetEmpresaById.UseCase;
+
+type
+  iGetEmpresaByIdController = interface
+    ['{2410d452-49b7-4d55-b781-b2e8b740839a}']
+    procedure handle(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+  end;
+
+  TGetEmpresaByIdController = class(TInterfacedObject, iGetEmpresaByIdController)
+  private
+    FGetEmpresaByIdUseCase: iGetEmpresaByIdUseCase;
+  public
+    constructor Create(Value: iGetEmpresaByIdUseCase);
+    procedure handle(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+  end;
+
+implementation
+
+uses
+  Service.Utils, Empresa.Entity, System.JSON, REST.Json;
+
+{ TGeTEmpresasByIdController }
+
+constructor TGetEmpresaByIdController.Create(Value: iGetEmpresaByIdUseCase);
+begin
+  FGetEmpresaByIdUseCase := Value;
+end;
+
+procedure TGetEmpresaByIdController.handle(Req: THorseRequest;
+  Res: THorseResponse; Next: TProc);
+var
+  empresa: TEmpresas;
+  id: String;
+begin
+  id := Req.Params.Items['id'];
+  empresa := FGetEmpresaByIdUseCase.execute(id);
+  Res.Send<TJSONObject>(TJson.ObjectToJsonObject(empresa)).Status(200);
+  empresa.Free;
+end;
+
+end.

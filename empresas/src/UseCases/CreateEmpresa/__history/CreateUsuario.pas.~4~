@@ -1,0 +1,23 @@
+unit CreateUsuario;
+
+interface
+
+uses CreateUsuario.Controller;
+
+function getController(): iCreateUsuarioController;
+
+implementation
+
+uses Models.DaoGeneric, Usuario.Entity, CreateUsuario.UseCase;
+
+function getController(): iCreateUsuarioController;
+var
+  DaoUsuario: iDAOGeneric<TUsuarios>;
+  CreateUsuarioUseCase: iCreateUsuarioUseCase;
+begin
+  DaoUsuario := TDAOGeneric<TUsuarios>.Create;
+  CreateUsuarioUseCase := TCreateUsuarioUseCase.Create(DaoUsuario);
+  result := TCreateUsuarioController.Create(CreateUsuarioUseCase);
+end;
+
+end.

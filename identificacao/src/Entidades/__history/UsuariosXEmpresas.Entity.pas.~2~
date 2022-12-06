@@ -1,0 +1,97 @@
+unit UsuariosXEmpresas.Entity;
+
+interface
+
+uses
+  SimpleAttributes, SimpleDAO, Horse,
+  System.Generics.Collections, Validacoes.Utils, System.SysUtils;
+
+type
+
+  [Tabela('usuarios_x_empresas')]
+  TUsuariosXEmpresas = class
+
+  private
+    FId: Integer;
+    FIdEmpresa: Integer;
+    FIdUsuario: Integer;
+    FIdGrupoUsuario: Integer;
+
+
+  public
+    [Campo('id'), PK, AutoInc]
+    property Id: Integer read FId write FId;
+
+    [Campo('id_empresa')]
+    property IdEmpresa: Integer read FIdEmpresa write FIdEmpresa;
+
+    [Campo('id_usuario')]
+    property IdUsuario: Integer read FIdUsuario write FIdUsuario;
+
+    [Campo('id_grupo_usuario')]
+    property IdGrupoUsuario: Integer read FIdGrupoUsuario write FIdGrupoUsuario;
+
+    destructor Destroy; override;
+    procedure Validate(validateStatus: TValidateType = vtNone);
+  end;
+
+implementation
+
+destructor TEmpresas.Destroy;
+begin
+  inherited;
+end;
+
+procedure TEmpresas.Validate(validateStatus: TValidateType);
+begin
+   if Trim(FCnpj) = '' then
+   raise EHorseException.New.Error('CNPJ é obrigatório');
+
+   if Trim(FXrazaoSocial) = '' then
+   raise EHorseException.New.Error('Razão Social é obrigatória');
+
+   if Trim(FXfant) = '' then
+   raise EHorseException.New.Error('Nome fantasia é obrigatório');
+
+   if Trim(FXlgr) = '' then
+   raise EHorseException.New.Error('Logradouro é obrigatório');
+
+   if Trim(FNro) = '' then
+   raise EHorseException.New.Error('Número é obrigatório');
+
+   if Trim(FXbairro) = '' then
+   raise EHorseException.New.Error('Bairro é obrigatório');
+
+   if Trim(FCmun) = '' then
+   raise EHorseException.New.Error('Código do Município é obrigatório');
+
+   if Trim(FXmun) = '' then
+   raise EHorseException.New.Error('Município é obrigatório');
+
+   if Trim(FUf) = '' then
+   raise EHorseException.New.Error('UF é obrigatório');
+
+   if Trim(FCep) = '' then
+   raise EHorseException.New.Error('CEP é obrigatório');
+
+   if Trim(FFone) = '' then
+   raise EHorseException.New.Error('Telefone é obrigatório');
+
+   if Trim(FIe) = '' then
+   raise EHorseException.New.Error('Inscrição Estadual é obrigatória');
+
+   if Trim(FCrt) = '' then
+   raise EHorseException.New.Error('CRT é obrigatório');
+
+   if not TValidacoes.isCNPJ(FCnpj) then
+   raise EHorseException.New.Error('CNPJ inválido');
+
+   if (not TValidacoes.isCelularValido(Fone)) and
+   (not TValidacoes.isTelefoneValido(Fone)) then
+   raise EHorseException.New.Error('Telefone inválido');
+
+   if not TValidacoes.isCEPValido(Cep) then
+   raise EHorseException.New.Error('CEP inválido');
+end;
+
+end.

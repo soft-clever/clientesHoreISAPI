@@ -1,0 +1,14 @@
+unit GetAllProdutos;
+
+interface
+  uses
+    GetAllProdutos.Controller;
+
+  function getController: TListAllProdutosController;
+
+implementation
+
+  uses
+     Models.DaoGeneric,
+
+end.

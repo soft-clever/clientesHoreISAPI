@@ -8,10 +8,10 @@ uses
 type
   TUtils = class
   private
-    class procedure TryFreeAndNil(objeto: TObject);
   public
+    class procedure TryFreeAndNil(objeto: TObject);
     class function PegarValor(JSON, campo: string; index: integer = 0): string;
-    function ObjectListToJsonArray<T: Class>(aList: TObjectList<T>): TJsonArray;
+    class function ObjectListToJsonArray<T: Class>(aList: TObjectList<T>): TJsonArray;
   end;
 
 implementation
@@ -21,7 +21,7 @@ uses
 
 { TUtils }
 
-function TUtils.ObjectListToJsonArray<T>(aList: TObjectList<T>): TJsonArray;
+class function TUtils.ObjectListToJsonArray<T>(aList: TObjectList<T>): TJsonArray;
 var
   I: integer;
 begin

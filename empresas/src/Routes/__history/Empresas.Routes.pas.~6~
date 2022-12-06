@@ -1,0 +1,20 @@
+unit Empresas.Routes;
+
+interface
+
+procedure Registry();
+
+implementation
+
+uses
+  Horse, GetAllEmpresas, GetEmpresaById;
+
+procedure Registry();
+begin
+  // GET ALL
+  THorse.Get('/empresas', GetAllEmpresas.getController.handle);
+  // GET BY ID
+  THorse.Get('/empresas/:id', GetEmpresaById.getController.handle);
+end;
+
+end.

@@ -1,0 +1,23 @@
+unit Banco.Utils;
+
+interface
+
+uses
+  System.Generics.Collections, System.JSON, System.SysUtils, System.StrUtils;
+
+type
+  TBancoUtils = class
+  private
+  public
+    class function Existe(campo: string; valor: Variant) Boolean;
+  end;
+
+implementation
+
+class function TBancoUtils.Existe(campo: string; valor: Variant) Boolean;
+begin
+
+end;
+
+
+end.

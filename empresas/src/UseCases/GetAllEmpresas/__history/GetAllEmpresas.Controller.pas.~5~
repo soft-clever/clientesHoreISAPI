@@ -1,0 +1,44 @@
+unit GetAllEmpresas.Controller;
+
+interface
+
+uses Horse, GetAllEmpresas.UseCase, REST.Json, System.SysUtils, Service.Utils,
+  System.Generics.Collections, Empresa.Entity;
+
+type
+  iGetAllEmpresasController = interface
+    ['{6c65ddf1-90f6-4af2-9030-fd32b1300419}']
+    procedure handle(Req: THorseRequest; Res: THorseResponse; Next: TNextProc);
+  end;
+
+  TGetAllEmpresasController = class(TInterfacedObject,
+    iGetAllEmpresasController)
+  private
+    FListAllEmpresasUseCase: TGetAllEmpresasUseCase;
+  public
+    constructor Create(Value: TGetAllEmpresasUseCase);
+    procedure handle(Req: THorseRequest; Res: THorseResponse; Next: TNextProc);
+  end;
+
+implementation
+
+constructor TGetAllEmpresasController.Create(Value: TGetAllEmpresasUseCase);
+begin
+  FListAllEmpresasUseCase := Value;
+end;
+
+procedure TGetAllEmpresasController.handle(Req: THorseRequest;
+  Res: THorseResponse; Next: TProc);
+var
+  empresas: TObjectList<TEmpresas>;
+  limit, page: Integer;
+begin
+  limit := Req.Query.Field('limit').AsInteger;
+  page := Req.Query.Field('page').AsInteger;
+  empresas := FListAllEmpresasUseCase.execute(limit, page);
+
+  Res.Send(TUtils.ObjectListToJsonArray<TEmpresas>(empresas));
+  empresas.Free;
+end;
+
+end.

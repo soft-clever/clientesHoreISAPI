@@ -1,0 +1,40 @@
+unit CreateUsuario.UseCase;
+
+interface
+
+uses Models.DaoGeneric, Usuario.Entity, System.JSON;
+
+type
+  iCreateUsuarioUseCase = interface
+    ['{2620131b-c66f-475e-823b-7de9ec44e374}']
+    function execute(body: TJSONObject): TUsuario;
+  end;
+
+  TCreateUsuarioUseCase = class(TInterfacedObject, iCreateUsuarioUseCase)
+  private
+    FDAOUsuario: iDAOGeneric<TUsuario>;
+  public
+    constructor Create(Value: iDAOGeneric<TUsuario>);
+    function execute(body: TJSONObject): TUsuario;
+  end;
+
+implementation
+
+uses REST.Json;
+
+constructor TCreateUsuarioUseCase.Create(Value: iDAOGeneric<TUsuario>);
+begin
+  FDAOUsuario := Value;
+end;
+
+function TCreateUsuarioUseCase.execute(body: TJSONObject)
+  : TUsuario;
+var
+  usuario: TUsuario;
+begin
+  usuario := TJson.JsonToObject<TUsuario>(body);
+  FDAOUsuario.Insert(usuario);
+  result := usuario;
+end;
+
+end.

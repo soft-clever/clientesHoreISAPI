@@ -1,0 +1,37 @@
+unit GetUsuarioById.UseCase;
+
+interface
+
+uses
+  Models.DaoGeneric, Usuario.Entity;
+
+type
+  iGetUsuarioByIdUseCase = interface
+    ['{879aaffb-e718-437f-a84e-0cfd104fe96d}']
+    function execute(id: String): TUsuario;
+  end;
+
+  TGetUsuarioByIdUseCase = class(TInterfacedObject, iGetUsuarioByIdUseCase)
+  private
+    FDAOClientes: iDAOGeneric<TUsuario>;
+  public
+    constructor Create(Value: iDAOGeneric<TUsuario>);
+    function execute(id: String): TUsuario;
+  end;
+
+implementation
+
+{ TGetUsuarioByIdUseCase }
+
+constructor TGetUsuarioByIdUseCase.Create(Value: iDAOGeneric<TUsuario>);
+begin
+  FDAOClientes := Value;
+end;
+
+function TGetUsuarioByIdUseCase.execute(id: String): TUsuario;
+begin
+  result := TUsuario.Create;
+  FDAOClientes.Find(id, result);
+end;
+
+end.

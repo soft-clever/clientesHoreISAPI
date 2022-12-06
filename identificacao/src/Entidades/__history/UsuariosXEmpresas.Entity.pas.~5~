@@ -1,0 +1,56 @@
+unit UsuariosXEmpresas.Entity;
+
+interface
+
+uses
+  SimpleAttributes, SimpleDAO, Horse,
+  System.Generics.Collections, Validacoes.Utils, System.SysUtils;
+
+type
+
+  [Tabela('usuarios_x_empresas')]
+  TUsuariosXEmpresas = class
+
+  private
+    FId: Integer;
+    FIdEmpresa: Integer;
+    FIdUsuario: Integer;
+    FIdGrupoUsuario: Integer;
+
+  public
+    [Campo('id'), PK, AutoInc]
+    property Id: Integer read FId write FId;
+
+    [Campo('id_empresa')]
+    property IdEmpresa: Integer read FIdEmpresa write FIdEmpresa;
+
+    [Campo('id_usuario')]
+    property IdUsuario: Integer read FIdUsuario write FIdUsuario;
+
+    [Campo('id_grupo_usuario')]
+    property IdGrupoUsuario: Integer read FIdGrupoUsuario write FIdGrupoUsuario;
+
+    destructor Destroy; override;
+    procedure Validate(validateStatus: TValidateType = vtNone);
+  end;
+
+implementation
+
+destructor TUsuariosXEmpresas.Destroy;
+begin
+  inherited;
+end;
+
+procedure TUsuariosXEmpresas.Validate(validateStatus: TValidateType);
+begin
+  if IdEmpresa <= 0 then
+    raise EHorseException.New.Error('ID da Empresa é obrigatório');
+
+  if IdUsuario <= 0 then
+    raise EHorseException.New.Error('ID do Usuário é obrigatório');
+
+  if IdGrupoUsuario <= 0 then
+    raise EHorseException.New.Error('ID do Grupo é obrigatório');
+end;
+
+end.

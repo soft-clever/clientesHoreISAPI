@@ -84,8 +84,7 @@ function TDAOGeneric<T>.Find(aKey: String; aValue: Variant; var aObject: T)
 begin
   Result := Self;
   FDAO.Find(aKey, aValue);
-  if not(FDataSource.DataSet.IsEmpty) then
-    aObject := TJson.JsonToObject<T>(FDataSource.DataSet.AsJSONObjectString);
+  aObject := TJson.JsonToObject<T>(FDataSource.DataSet.AsJSONObjectString);
 end;
 
 function TDAOGeneric<T>.Find(const aID: String; var aObject: T): iDAOGeneric<T>;
@@ -123,8 +122,15 @@ function TDAOGeneric<T>.Find(campos, where, orderby, join, groupby: string;
   var aObject: T): iDAOGeneric<T>;
 begin
   Result := Self;
-  FDAO.SQL.Fields(campos).join(join).where(where).orderby(orderby)
-    .groupby(groupby).&End.Find;
+  FDAO
+    .SQL
+      .Fields(campos)
+      .join(join)
+      .where(where)
+      .orderby(orderby)
+      .groupby(groupby)
+    .&End
+  .Find;
 
   aObject := TJson.JsonToObject<T>(FDataSource.DataSet.AsJSONObjectString);
 end;

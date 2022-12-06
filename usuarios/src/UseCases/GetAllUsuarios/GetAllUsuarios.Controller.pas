@@ -10,7 +10,8 @@ type
     procedure handle(Req: THorseRequest; Res: THorseResponse; Next: TNextProc);
   end;
 
-  TGetAllUsuariosController = class(TInterfacedObject, iGetAllUsuariosController)
+  TGetAllUsuariosController = class(TInterfacedObject,
+    iGetAllUsuariosController)
   private
     FListAllUsuariosUseCase: TGetAllUsuariosUseCase;
   public
@@ -33,20 +34,14 @@ end;
 procedure TGetAllUsuariosController.handle(Req: THorseRequest;
   Res: THorseResponse; Next: TProc);
 var
-  util: TUtils;
   usuarios: TObjectList<TUsuarios>;
   limit, page: Integer;
-  resp: string;
 begin
   limit := Req.Query.Field('limit').AsInteger;
   page := Req.Query.Field('page').AsInteger;
   usuarios := FListAllUsuariosUseCase.execute(limit, page);
-  util := TUtils.Create;
 
-  resp := Req.Headers.Field('Authorization').AsString;
-
-  Res.Send(resp).Status(200);
-  // Res.Send<TJSonArray>(util.ObjectListToJsonArray<TUsuarios>(usuarios));
+  Res.Send(TUtils.ObjectListToJsonArray<TUsuarios>(usuarios));
   usuarios.Free;
 end;
 

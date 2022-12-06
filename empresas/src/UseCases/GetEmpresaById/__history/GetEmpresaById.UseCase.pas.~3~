@@ -1,0 +1,37 @@
+unit GetEmpresaById.UseCase;
+
+interface
+
+uses
+  Models.DaoGeneric, Empresa.Entity;
+
+type
+  iGetEmpresaByIdUseCase = interface
+    ['{da56742c-15e6-4fb5-933d-eef01d564b0e}']
+    function execute(id: String): TEmpresas;
+  end;
+
+  TGetEmpresaByIdUseCase = class(TInterfacedObject, iGetEmpresaByIdUseCase)
+  private
+    FDAOClientes: iDAOGeneric<TEmpresas>;
+  public
+    constructor Create(Value: iDAOGeneric<TEmpresas>);
+    function execute(id: String): TEmpresas;
+  end;
+
+implementation
+
+{ TGeTEmpresasByIdUseCase }
+
+constructor TGetEmpresaByIdUseCase.Create(Value: iDAOGeneric<TEmpresas>);
+begin
+  FDAOClientes := Value;
+end;
+
+function TGetEmpresaByIdUseCase.execute(id: String): TEmpresas;
+begin
+  result := TEmpresas.Create;
+  FDAOClientes.Find(id, result);
+end;
+
+end.

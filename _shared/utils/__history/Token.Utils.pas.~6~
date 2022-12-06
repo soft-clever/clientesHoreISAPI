@@ -1,0 +1,37 @@
+unit Token.Utils;
+
+interface
+
+uses
+  Models.DaoGeneric, Service.Utils, System.SysUtils;
+
+type
+  TTokenUtils = class
+  private
+  public
+    class function senhaToken(): string;
+    class function gerarToken(claimChave: string = ''; claimValor: string = '';
+      expiracao: TDateTime = 0): string;
+  end;
+
+implementation
+
+class function TBancoUtils.Existe<T>(campo: string; valor: Variant): Boolean;
+var
+  Obj: T;
+  DaoGeneric: TDAOGeneric<T>;
+begin
+  DaoGeneric := TDAOGeneric<T>.Create;
+  try
+    DaoGeneric.Find(campo, valor, Obj);
+  except
+    on e: Exception do
+    begin
+      result := false;
+      exit;
+    end;
+  end;
+  result := true;
+end;
+
+end.

@@ -1,0 +1,23 @@
+unit CreateProduto;
+
+interface
+
+  uses CreateProduto.Controller;
+
+function getController(): iCreateProdutoController;
+
+implementation
+
+  uses Models.DaoGeneric, Produto.Entity, CreateProduto.UseCase;
+
+  function getController(): iCreateProdutoController;
+  var
+    DaoCliente: iDAOGeneric<TProduto>;
+    CreateProdutoUseCase: iCreateProdutoUseCase;
+  begin
+    DaoCliente := TDAOGeneric<TProduto>.Create;
+    CreateProdutoUseCase := TCreateProdutoUseCase.Create(DaoCliente);
+    result := TCreateProdutoController.Create(CreateProdutoUseCase);
+  end;
+
+end.

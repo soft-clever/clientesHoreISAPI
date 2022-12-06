@@ -1,8 +1,5 @@
 library usuariosService;
 
-// program usuariosService;
-// {$APPTYPE CONSOLE}
-
 {$R *.res}
 
 uses

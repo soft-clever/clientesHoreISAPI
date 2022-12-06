@@ -1,7 +1,0 @@
-unit RefreshToken.UseCase;
-
-interface
-
-implementation
-
-end.

@@ -10,10 +10,14 @@ procedure Registry();
 implementation
 
 uses
-  RefreshToken;
+  RefreshToken, Login, Cadastro;
 
 procedure Registry();
 begin
+  // LOGIN
+  THorse.Post('/login', Login.GetController.handle);
+  // CADASTRO
+  THorse.Post('/cadastro', Cadastro.GetController.handle);
   // REFRESH TOKEN
   THorse.Post('/token', RefreshToken.GetController.handle);
 end;

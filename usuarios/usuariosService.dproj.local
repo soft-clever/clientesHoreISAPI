@@ -29,8 +29,8 @@
     <Transaction>2022/12/01 12:16:35.000.480,=C:\Users\Usuário-008\Desktop\code\NFe Web\Server\usuarios\src\UseCases\UpdateUsuario\UpdateUsuario.pas</Transaction>
     <Transaction>2022/12/01 12:16:35.000.501,=C:\Users\Usuário-008\Desktop\code\NFe Web\Server\usuarios\src\UseCases\UpdateUsuario\UpdateUsuario.UseCase.pas</Transaction>
     <Transaction>2022/12/01 12:16:35.000.451,=C:\Users\Usuário-008\Desktop\code\NFe Web\Server\usuarios\src\UseCases\UpdateUsuario\UpdateUsuario.Controller.pas</Transaction>
-    <Transaction>2022/12/01 12:16:57.000.788,C:\Users\Usuário-008\Desktop\code\NFe Web\Server\usuarios\Unit1.pas=C:\Users\Usuário-008\Desktop\code\NFe Web\Server\usuarios\Controllers.abc.pas</Transaction>
     <Transaction>2022/12/01 12:16:57.000.723,=C:\Users\Usuário-008\Desktop\code\NFe Web\Server\usuarios\Unit1.pas</Transaction>
+    <Transaction>2022/12/01 12:16:57.000.788,C:\Users\Usuário-008\Desktop\code\NFe Web\Server\usuarios\Unit1.pas=C:\Users\Usuário-008\Desktop\code\NFe Web\Server\usuarios\Controllers.abc.pas</Transaction>
     <Transaction>2022/12/01 12:21:05.000.966,C:\Users\Usuário-008\Desktop\code\NFe Web\Server\usuarios\Controllers.abc.pas=</Transaction>
     <Transaction>2022/12/01 12:54:33.000.407,=C:\Users\Usuário-008\Desktop\code\NFe Web\Server\usuarios\Unit1.pas</Transaction>
     <Transaction>2022/12/01 12:54:58.000.546,C:\Users\Usuário-008\Desktop\code\NFe Web\Server\_shared\middlewares\Auth.pas=C:\Users\Usuário-008\Desktop\code\NFe Web\Server\usuarios\Unit1.pas</Transaction>
@@ -59,9 +59,9 @@
     <Transaction>2022/12/02 13:48:30.000.445,=C:\Users\Usuário-008\Desktop\code\NFe Web\Server\_shared\auth\Auth.Token.pas</Transaction>
     <Transaction>2022/12/02 13:53:13.000.751,=C:\Users\Usuário-008\Desktop\code\NFe Web\Server\usuarios\Unit1.pas</Transaction>
     <Transaction>2022/12/02 13:53:47.000.251,C:\Users\Usuário-008\Desktop\code\NFe Web\Server\_shared\auth\Auth.Middleware.pas=C:\Users\Usuário-008\Desktop\code\NFe Web\Server\usuarios\Unit1.pas</Transaction>
-    <Transaction>2022/12/05 10:53:31.393,=C:\Users\Usuário-008\Desktop\code\NFe Web\Server\usuarios\src\UseCases\Cadastro\Cadastro.Controller.pas</Transaction>
-    <Transaction>2022/12/05 10:53:31.444,=C:\Users\Usuário-008\Desktop\code\NFe Web\Server\usuarios\src\UseCases\Cadastro\Cadastro.pas</Transaction>
-    <Transaction>2022/12/05 10:53:31.497,=C:\Users\Usuário-008\Desktop\code\NFe Web\Server\usuarios\src\UseCases\Cadastro\Cadastro.UseCase.pas</Transaction>
-    <Transaction>2022/12/05 10:54:50.578,=C:\Users\Usuário-008\Desktop\code\NFe Web\Server\_shared\utils\Validacoes.Utils.pas</Transaction>
+    <Transaction>2022/12/05 10:53:31.000.497,=C:\Users\Usuário-008\Desktop\code\NFe Web\Server\usuarios\src\UseCases\Cadastro\Cadastro.UseCase.pas</Transaction>
+    <Transaction>2022/12/05 10:53:31.000.444,=C:\Users\Usuário-008\Desktop\code\NFe Web\Server\usuarios\src\UseCases\Cadastro\Cadastro.pas</Transaction>
+    <Transaction>2022/12/05 10:53:31.000.393,=C:\Users\Usuário-008\Desktop\code\NFe Web\Server\usuarios\src\UseCases\Cadastro\Cadastro.Controller.pas</Transaction>
+    <Transaction>2022/12/05 10:54:50.000.578,=C:\Users\Usuário-008\Desktop\code\NFe Web\Server\_shared\utils\Validacoes.Utils.pas</Transaction>
   </Transactions>
 </BorlandProject>

@@ -76,7 +76,8 @@ begin
     if not(TValidacoes.isEmailValido(email)) then
       raise EHorseException.New.Error('Email inválido');
 
-    if not(TValidacoes.isCelularValido(celular)) then
+    if (not TValidacoes.isCelularValido(celular)) and
+      (not TValidacoes.isTelefoneValido(celular)) then
       raise EHorseException.New.Error('Celular inválido');
 
     if not(TValidacoes.isSenhaForte(senha)) then

@@ -1,0 +1,50 @@
+unit Token.Utils;
+
+interface
+
+uses
+  Models.DaoGeneric, Service.Utils, System.SysUtils, JOSE.Core.JWT,
+  JOSE.Core.Builder;
+
+type
+  TTokenUtils = class
+  private
+  public
+    class function senhaToken(): string;
+    class function gerarToken(claimChave: string = ''; claimValor: string = '';
+      expiracao: TDateTime = 0): string;
+  end;
+
+implementation
+
+class function TTokenUtils.senhaToken: string;
+begin
+  result := 'soft@1973';
+end;
+
+class function TTokenUtils.gerarToken(claimChave: string = '';
+  claimValor: string = ''; expiracao: TDateTime = 0): string;
+var
+  Token: TJWT;
+  CompactToken: String;
+begin
+  Token := TJWT.Create;
+  try
+    Token.Claims.IssuedAt := Now;
+
+    Token.Claims.Issuer := 'Soft Clever Informática LTDA.';
+
+    if (expiracao > 0) and (expiracao > Now) then
+      Token.Claims.Expiration := expiracao;
+
+    if ((claimChave <> '') and (claimValor <> '')) then
+      Token.Claims.SetClaimOfType<string>(claimChave, claimValor);
+
+    CompactToken := TJOSE.SHA256CompactToken(senhaToken, Token);
+  finally
+    FreeAndNil(Token);
+  end;
+  result := CompactToken;
+end;
+
+end.

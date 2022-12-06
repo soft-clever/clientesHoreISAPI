@@ -1,0 +1,54 @@
+unit GetAllEmpresas.Controller;
+
+interface
+
+uses Horse, GetAllEmpresas.UseCase, REST.Json, System.SysUtils;
+
+type
+  iGetAllEmpresasController = interface
+    ['{6c65ddf1-90f6-4af2-9030-fd32b1300419}']
+    procedure handle(Req: THorseRequest; Res: THorseResponse; Next: TNextProc);
+  end;
+
+  TGetAllEmpresasController = class(TInterfacedObject,
+    iGetAllEmpresasController)
+  private
+    FListAllUsuariosUseCase: TGetAllEmpresasUseCase;
+  public
+    constructor Create(Value: TGetAllEmpresasUseCase);
+    procedure handle(Req: THorseRequest; Res: THorseResponse; Next: TNextProc);
+  end;
+
+implementation
+
+uses
+  Service.Utils, System.Generics.Collections, Empresa.Entity;
+
+{ TGetAllEmpresasController }
+
+constructor TGetAllEmpresasController.Create(Value: TGetAllEmpresasUseCase);
+begin
+  FListAllUsuariosUseCase := Value;
+end;
+
+procedure TGetAllEmpresasController.handle(Req: THorseRequest;
+  Res: THorseResponse; Next: TProc);
+var
+  util: TUtils;
+  empresas: TObjectList<TEmpresas>;
+  limit, page: Integer;
+  resp: string;
+begin
+  limit := Req.Query.Field('limit').AsInteger;
+  page := Req.Query.Field('page').AsInteger;
+  empresas := FListAllUsuariosUseCase.execute(limit, page);
+  util := TUtils.Create;
+
+  resp := Req.Headers.Field('Authorization').AsString;
+
+  Res.Send(resp).Status(200);
+  // Res.Send<TJSonArray>(util.ObjectListToJsonArray<TUsuarios>(empresas));
+  empresas.Free;
+end;
+
+end.

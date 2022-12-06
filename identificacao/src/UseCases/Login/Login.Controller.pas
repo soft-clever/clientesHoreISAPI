@@ -1,0 +1,69 @@
+unit Login.Controller;
+
+interface
+
+uses
+  Horse, Login.UseCase, REST.Json, System.SysUtils, Usuario.Entity, System.Json,
+  System.DateUtils, Token.Utils;
+
+type
+  iLoginController = interface
+    ['{12aa39b4-95b1-420b-95ac-d3cf1952e7b8}']
+    procedure handle(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+  end;
+
+  TLoginController = class
+  private
+    FLoginUseCase: TLoginUseCase;
+  public
+    constructor Create(Value: TLoginUseCase);
+    procedure handle(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+
+  end;
+
+implementation
+
+uses
+  Service.Utils, System.Generics.Collections;
+
+constructor TLoginController.Create(Value: TLoginUseCase);
+begin
+  FLoginUseCase := Value;
+end;
+
+procedure TLoginController.handle(Req: THorseRequest; Res: THorseResponse;
+  Next: TProc);
+var
+  Token: TJSONObject;
+  Usuario: TUsuarios;
+  email, senha, body: string;
+begin
+  // Verfica Email
+  email := TUtils.PegarValor(Req.body, 'email');
+  if email = '' then
+    raise EHorseException.New.Error('Email não informado')
+      .Status(THTTPStatus.BadRequest);
+  // Verfica Senha
+  senha := TUtils.PegarValor(Req.body, 'senha');
+  if senha = '' then
+    raise EHorseException.New.Error('Senha não informada')
+      .Status(THTTPStatus.BadRequest);
+  // Executa Login
+  Usuario := FLoginUseCase.execute(email, senha);
+  // Cria Objeto para Response
+  Token := TJSONObject.Create;
+  Token.AddPair('refreshToken', TTokenUtils.gerarToken(
+      'userId', Usuario.id.ToString, IncDay(Now, 15)));
+  Token.AddPair('accessToken', TTokenUtils.gerarToken(
+      'userId', Usuario.id.ToString, IncHour(Now, 1)));
+  // Response
+  Res.Send(Token.ToJSON).Status(200)
+    .ContentType('application/json;charset=UTF-8');
+  // Garbage Collector
+  if Assigned(Token) then
+    FreeAndNil(Token);
+  if Assigned(Usuario) then
+    FreeAndNil(Usuario);
+end;
+
+end.

@@ -1,0 +1,7 @@
+unit GetAllEmpresas.UseCase;
+
+interface
+
+implementation
+
+end.

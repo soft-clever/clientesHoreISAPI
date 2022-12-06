@@ -1,0 +1,18 @@
+unit Empresas.Routes;
+
+interface
+
+procedure Registry();
+
+implementation
+
+uses
+  Horse, GetAllEmpresas;
+// GetAllUsuarios, GetUsuarioById, CreateUsuario, Login, Cadastro;
+
+procedure Registry();
+begin
+  THorse.Use('', GetAllEmpresas.getController.handle);
+end;
+
+end.

@@ -1,0 +1,20 @@
+unit Empresas.Routes;
+
+interface
+
+uses
+  Horse, Horse.JWT, Login.Controller;
+
+procedure Registry();
+
+implementation
+
+//uses
+//  GetAllUsuarios, GetUsuarioById, CreateUsuario, Login, Cadastro;
+
+procedure Registry();
+begin
+
+end;
+
+end.

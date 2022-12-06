@@ -6,7 +6,7 @@ uses
   Models.DaoGeneric, System.Generics.Collections,
   Usuario.Entity, System.SysUtils, System.JSON, REST.JSON, Validacoes.Utils,
   Horse.Exception, Service.Utils, JOSE.Core.JWK, JOSE.Core.JWT,
-  JOSE.Core.Builder, Auth.Token, Horse;
+  JOSE.Core.Builder, Horse, System.DateUtils, Token.Utils;
 
 type
   iRefreshTokenUseCase = interface
@@ -33,15 +33,26 @@ function TRefreshTokenUseCase.execute(compactToken: string): string;
 var
   LKey: TJWK;
   LToken: TJWT;
-  teste: string;
+  userToken: string;
+  Usuario: TUsuarios;
 begin
-  LKey := TJWK.Create(TAuthToken.senhaToken);
+  LKey := TJWK.Create(TTokenUtils.senhaToken);
   LToken := TJOSE.Verify(LKey, compactToken);
 
   try
     if LToken.Verified then
     begin
-      teste := LToken.Claims.Clone.ToJSON;
+      userToken := TUtils.PegarValor(LToken.Claims.Clone.ToJSON, 'userToken');
+
+      try
+        FDAOUsuarios.Find('user_token', userToken, Usuario);
+      except
+        on e: Exception do
+          raise EHorseException.New.Error('Token inválido')
+            .Status(THTTPStatus.Unauthorized);
+      end;
+
+      result := TTokenUtils.gerarToken('userToken', userToken, IncDay(Now, 15))
     end
     else
       raise EHorseException.New.Error('Unauthorized')

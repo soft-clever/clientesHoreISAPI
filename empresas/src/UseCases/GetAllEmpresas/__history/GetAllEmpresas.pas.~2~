@@ -1,0 +1,27 @@
+unit GetAllEmpresas;
+
+interface
+
+uses
+  GetAllEmpresas.Controller;
+
+function GetController: TGetAllEmpresasController;
+
+implementation
+
+uses
+  Models.DaoGeneric, Usuario.Entity, GetAllEmpresas.UseCase;
+
+function GetController: TGetAllEmpresasController;
+var
+  DaoEmpresas: iDAOGeneric<TEmpresas>;
+  GetAllEmpresasUseCase: TGetAllEmpresasUseCase;
+begin
+  DaoEmpresas := TDAOGeneric<TEmpresas>.Create;
+
+  GetAllEmpresasUseCase := TGetAllEmpresasUseCase.Create(DaoEmpresas);
+
+  result := TGetAllEmpresasController.Create(GetAllEmpresasUseCase);
+end;
+
+end.

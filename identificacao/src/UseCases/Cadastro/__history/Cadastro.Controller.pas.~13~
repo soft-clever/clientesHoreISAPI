@@ -1,0 +1,66 @@
+unit Cadastro.Controller;
+
+interface
+
+uses
+  Horse, Cadastro.UseCase, REST.Json, System.SysUtils, Usuario.Entity,
+  System.Json, Auth.Token, Service.Utils, System.Generics.Collections;
+
+type
+  iCadastroController = interface
+    ['{354b4edc-7195-41b7-ac16-82ab01c318db}']
+    procedure handle(Req: THorseRequest; Res: THorseResponse; Next: TNextProc);
+  end;
+
+  TCadastroController = class(TInterfacedObject, iCadastroController)
+  private
+    FCadastroUseCase: iCadastroUseCase;
+  public
+    constructor Create(Value: iCadastroUseCase);
+    procedure handle(Req: THorseRequest; Res: THorseResponse; Next: TNextProc);
+
+  end;
+
+implementation
+
+constructor TCadastroController.Create(Value: iCadastroUseCase);
+begin
+  FCadastroUseCase := Value;
+end;
+
+procedure TCadastroController.handle(Req: THorseRequest; Res: THorseResponse;
+  Next: TNextProc);
+var
+  Token: TJSONObject;
+  Usuario: TUsuarios;
+  email, senha, body: string;
+begin
+  email := TUtils.PegarValor(Req.body, 'email');
+  senha := TUtils.PegarValor(Req.body, 'senha');
+
+  try
+    Usuario := FCadastroUseCase.execute(email, senha);
+  except
+    on e: exception do
+    begin
+      Usuario.Free;
+      Res.Send(e.Message).Status(400);
+      exit;
+    end;
+  end;
+
+  Token := TJSONObject.Create.AddPair('userToken',
+    TAuthToken.gerarToken('userToken', Usuario.user_token));
+
+  Usuario.Validate();
+
+  try
+    Res.Send(Token.ToJSON).Status(200)
+      .ContentType('application/json;charset=UTF-8')
+  finally
+    Token.Free;
+    Usuario.Free;
+  end;
+end;
+
+end.

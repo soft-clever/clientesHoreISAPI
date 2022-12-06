@@ -4,7 +4,7 @@ interface
 
 uses
   Horse, REST.Json, System.SysUtils,
-  System.Json, Auth.Token, Service.Utils, System.Generics.Collections,
+  System.Json, Service.Utils, System.Generics.Collections,
   RefreshToken.UseCase;
 
 type
@@ -29,21 +29,26 @@ begin
   FRefreshTokenUseCase := Value;
 end;
 
-procedure TRefreshTokenController.handle(Req: THorseRequest; Res: THorseResponse;
-  Next: TNextProc);
+procedure TRefreshTokenController.handle(Req: THorseRequest;
+  Res: THorseResponse; Next: TNextProc);
 var
-  token: string;
-  LBody: TJSONObject;
+  Token: string;
+  ResJSON: TJSONObject;
 begin
-  LBody := Req.Body<TJSONObject>;
-  if not(Assigned(LBody)) then
-    raise EHorseException.New.Error('Body não informado')
-      .Status(THTTPStatus.BadRequest);
+  Token := TUtils.PegarValor(Req.Body, 'refreshToken');
+  if Token = '' then
+    Res.Send('Token não informado').Status(400)
+  else
+  begin
+    try
+      ResJSON := TJSONObject.Create.AddPair('accessToken',
+        FRefreshTokenUseCase.execute(Token));
 
-  token := TUtils.PegarValor(LBody.ToJSON, 'refreshToken');
-  FRefreshTokenUseCase.execute(token);
-
-  Res.Send('Cadastro realizado com sucesso').Status(200);
+      Res.Send(ResJSON.ToJSON).Status(200).ContentType('application/json');
+    finally
+      ResJSON.Free;
+    end;
+  end;
 end;
 
 end.

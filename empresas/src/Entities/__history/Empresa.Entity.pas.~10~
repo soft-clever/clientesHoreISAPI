@@ -1,0 +1,181 @@
+unit Empresa.Entity;
+
+interface
+
+uses
+  SimpleAttributes, SimpleDAO,
+  System.Generics.Collections, Validacoes.Utils, Horse, System.SysUtils;
+
+type
+
+  [Tabela('empresas')]
+  TEmpresas = class
+  private
+    FId: Integer;
+    FCnpj: String;
+    FXrazaoSocial: String;
+    FXfant: String;
+    FXlgr: String;
+    FNro: String;
+    FXcpl: String;
+    FXbairro: String;
+    FCmun: String;
+    FXmun: String;
+    FUf: String;
+    FCep: String;
+    FFone: String;
+    FIe: String;
+    FCrt: String;
+    FToken: String;
+    FBanco: String;
+    FStatus: String;
+
+    procedure SetCnpj(const Value: String);
+    procedure SetCmun(const Value: String);
+    procedure SetCep(const Value: String);
+    procedure SetFone(const Value: String);
+    procedure SetIe(const Value: String);
+  public
+    [Campo('id'), PK, AutoInc]
+    property Id: Integer read FId write FId;
+
+    [Campo('cnpj')]
+    property Cnpj: String read FCnpj write SetCnpj;
+
+    [Campo('xRazaoSocial')]
+    property XrazaoSocial: String read FXrazaoSocial write FXrazaoSocial;
+
+    [Campo('xFant')]
+    property Xfant: String read FXfant write FXfant;
+
+    [Campo('xLgr')]
+    property Xlgr: String read FXlgr write FXlgr;
+
+    [Campo('nro')]
+    property Nro: String read FNro write FNro;
+
+    [Campo('xCpl')]
+    property Xcpl: String read FXcpl write FXcpl;
+
+    [Campo('xBairro')]
+    property Xbairro: String read FXbairro write FXbairro;
+
+    [Campo('cMun')]
+    property Cmun: String read FCmun write SetCmun;
+
+    [Campo('xMun')]
+    property Xmun: String read FXmun write FXmun;
+
+    [Campo('uf')]
+    property Uf: String read FUf write FUf;
+
+    [Campo('cep')]
+    property Cep: String read FCep write SetCep;
+
+    [Campo('fone')]
+    property Fone: String read FFone write SetFone;
+
+    [Campo('ie')]
+    property Ie: String read FIe write SetIe;
+
+    [Campo('crt')]
+    property Crt: String read FCrt write FCrt;
+
+    [Campo('token')]
+    property Token: String read FToken write FToken;
+
+    [Campo('banco')]
+    property Banco: String read FBanco write FBanco;
+
+    [Campo('status')]
+    property Status: String read FStatus write FStatus;
+
+    destructor Destroy; override;
+    procedure Validate(validateStatus: TValidateType = vtNone);
+  end;
+
+implementation
+
+destructor TEmpresas.Destroy;
+begin
+  inherited;
+end;
+
+procedure TEmpresas.Validate(validateStatus: TValidateType);
+begin
+//  if Trim(FCnpj) = '' then
+//    raise EHorseException.New.Error('CNPJ é obrigatório');
+//
+//  if Trim(FXrazaoSocial) = '' then
+//    raise EHorseException.New.Error('Razão Social é obrigatória');
+//
+//  if Trim(FXfant) = '' then
+//    raise EHorseException.New.Error('Nome fantasia é obrigatório');
+//
+//  if Trim(FXlgr) = '' then
+//    raise EHorseException.New.Error('Logradouro é obrigatório');
+//
+//  if Trim(FNro) = '' then
+//    raise EHorseException.New.Error('Número é obrigatório');
+//
+//  if Trim(FXbairro) = '' then
+//    raise EHorseException.New.Error('Bairro é obrigatório');
+//
+//  if Trim(FCmun) = '' then
+//    raise EHorseException.New.Error('Código do Município é obrigatório');
+//
+//  if Trim(FXmun) = '' then
+//    raise EHorseException.New.Error('Município é obrigatório');
+//
+//  if Trim(FUf) = '' then
+//    raise EHorseException.New.Error('UF é obrigatório');
+//
+//  if Trim(FCep) = '' then
+//    raise EHorseException.New.Error('CEP é obrigatório');
+//
+//  if Trim(FFone) = '' then
+//    raise EHorseException.New.Error('Telefone é obrigatório');
+//
+//  if Trim(FIe) = '' then
+//    raise EHorseException.New.Error('Inscrição Estadual é obrigatória');
+//
+//  if Trim(FCrt) = '' then
+//    raise EHorseException.New.Error('CRT é obrigatório');
+//
+//  if not TValidacoes.isCNPJ(FCnpj) then
+//    raise EHorseException.New.Error('CNPJ inválido');
+//
+//  if (not TValidacoes.isCelularValido(Fone)) and
+//    (not TValidacoes.isTelefoneValido(Fone)) then
+//    raise EHorseException.New.Error('Telefone inválido');
+//
+//  if not TValidacoes.isCEPValido(Cep) then
+//    raise EHorseException.New.Error('CEP inválido');
+end;
+
+procedure TEmpresas.SetCnpj(const Value: string);
+begin
+  Cnpj := TValidacoes.semPontosNemTracinhos(Value);
+end;
+
+procedure TEmpresas.SetCmun(const Value: string);
+begin
+  Cmun := TValidacoes.semPontosNemTracinhos(Value);
+end;
+
+procedure TEmpresas.SetCep(const Value: string);
+begin
+  Cep := TValidacoes.semPontosNemTracinhos(Value);
+end;
+
+procedure TEmpresas.SetFone(const Value: string);
+begin
+  Fone := TValidacoes.semPontosNemTracinhos(Value);
+end;
+
+procedure TEmpresas.SetIe(const Value: string);
+begin
+  Ie := TValidacoes.semPontosNemTracinhos(Value);
+end;
+
+end.

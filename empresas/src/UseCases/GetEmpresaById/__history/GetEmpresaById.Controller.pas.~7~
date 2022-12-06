@@ -1,0 +1,50 @@
+unit GetEmpresaById.Controller;
+
+interface
+
+uses
+  Horse, GetEmpresaById.UseCase, Banco.Utils, System.SysUtils;
+
+type
+  iGetEmpresaByIdController = interface
+    ['{5ca71729-c478-4c04-a944-ef118d5fd2e0}']
+    procedure handle(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+  end;
+
+  TGetEmpresaByIdController = class(TInterfacedObject,
+    iGetEmpresaByIdController)
+  private
+    FGetEmpresaByIdUseCase: iGetEmpresaByIdUseCase;
+  public
+    constructor Create(Value: iGetEmpresaByIdUseCase);
+    procedure handle(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+  end;
+
+implementation
+
+uses
+  Service.Utils, Empresa.Entity, System.JSON, REST.JSON;
+
+constructor TGetEmpresaByIdController.Create(Value: iGetEmpresaByIdUseCase);
+begin
+  FGetEmpresaByIdUseCase := Value;
+end;
+
+procedure TGetEmpresaByIdController.handle(Req: THorseRequest;
+  Res: THorseResponse; Next: TProc);
+var
+  id: String;
+  existe: boolean;
+  Empresa: TEmpresas;
+begin
+  id := Req.Params.Items['id'];
+  Empresa := FGetEmpresaByIdUseCase.execute(id);
+
+  existe := TBancoUtils.existe<TEmpresas>('xRazaoSocial', 'CAETANO');
+  Res.Send(BoolToStr(existe)).Status(200);
+
+  // Res.Send<TJSONObject>(TJson.ObjectToJsonObject(Empresa)).Status(200);
+  TUtils.TryFreeAndNil(Empresa);
+end;
+
+end.
